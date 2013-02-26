@@ -47,13 +47,7 @@ class AccountService {
 			throw new \InvalidArgumentException('Account "' . $email . '" already exists');
 		}
 
-		$account = $this->accountFactory->create($email, $name, $password, $imageId);
-
-		$this->accountRepository->add($account);
-
-		$this->persistenceManager->persistAll();
-
-		return $account->getDescriptor();
+		return $this->createAccountHelper($email, $name, $password, $imageId);
 	}
 
 	/**
@@ -66,6 +60,52 @@ class AccountService {
 	public function updateAccountInfo($email, $name = NULL, $imageId = NULL) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
+		return $this->updateAccountHelper($account, $name, $imageId);
+	}
+
+
+	/**
+	 * Create account or update account depending on if it exists or not
+	 *
+	 * @param string $email
+	 * @param string $name
+	 * @param string $password
+	 * @param string $imageId
+	 * @return \stdClass
+	 */
+	public function upsertAccount($email, $name, $password = NULL, $imageId = NULL) {
+		$account = $this->accountRepository->findOneByEmail($email);
+		if (empty($account)) {
+			return $this->createAccountHelper($email, $name, $password, $imageId);
+		} else {
+			return $this->updateAccountHelper($account, $name, $imageId);
+		}
+	}
+
+	/**
+	 * @param string $email
+	 * @param string $name
+	 * @param string $password
+	 * @param string $imageId
+	 * @return \stdClass
+	 */
+	protected function createAccountHelper($email, $name, $password, $imageId) {
+		$account = $this->accountFactory->create($email, $name, $password, $imageId);
+
+		$this->accountRepository->add($account);
+
+		$this->persistenceManager->persistAll();
+
+		return $account->getDescriptor();
+	}
+
+	/**
+	 * @param \Ag\Login\Domain\Model\Account $account
+	 * @param string $name
+	 * @param string $imageId
+	 * @return \stdClass
+	 */
+	protected function updateAccountHelper($account, $name, $imageId) {
 		if ($name !== NULL) {
 			$account->changeName($name);
 		}
@@ -80,23 +120,6 @@ class AccountService {
 		return $account->getDescriptor();
 	}
 
-	/**
-	 * Create account or update account depending on if it exists or not
-	 *
-	 * @param string $email
-	 * @param string $name
-	 * @param string $password
-	 * @param string $imageId
-	 * @return \stdClass
-	 */
-	public function upsertAccount($email, $name, $password = NULL, $imageId = NULL) {
-		$account = $this->accountRepository->findOneByEmail($email);
-		if (empty($account)) {
-			return $this->createAccount($email, $name, $password, $imageId);
-		} else {
-			return $this->updateAccountInfo($email, $name, $imageId);
-		}
-	}
 
 	/**
 	 * @param string $email
