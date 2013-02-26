@@ -134,7 +134,7 @@ class Account {
 	 */
 	public function getDescriptor() {
 		$descriptor = new \stdClass();
-		$descriptor->accoundId = $this->accountId;
+		$descriptor->accountId = $this->accountId;
 		$descriptor->name = $this->name;
 		$descriptor->email = $this->login->getAccountIdentifier();
 		$descriptor->imageId = $this->imageId;
