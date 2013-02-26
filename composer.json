@@ -1,0 +1,17 @@
+{
+    "name": "ag/login",
+    "type": "typo3-flow-package",
+    "description": "",
+    "version": "",
+    "require": {
+        "typo3/flow": "*",
+		"ag/event": "*",
+		"ag/utility": "*",
+		"kriswallsmith\/assetic": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Ag\\Login": "Classes"
+        }
+    }
+}

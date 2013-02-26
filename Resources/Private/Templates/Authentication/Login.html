@@ -1,0 +1,33 @@
+<f:layout name="Login"/>
+
+<f:section name="Content">
+	<div id="loginform">
+
+		<f:form action="authenticate" absolute="1" class="form-horizontal">
+			<div class="control-group">
+				<div class="controls">
+					<h3>Login</h3>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputEmail">Email</label>
+
+				<div class="controls">
+					<f:form.textfield id="inputEmail" name="__authentication[TYPO3][Flow][Security][Authentication][Token][UsernamePassword][username]"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="inputPassword">Password</label>
+
+				<div class="controls">
+					<f:form.password id="inputPassword" name="__authentication[TYPO3][Flow][Security][Authentication][Token][UsernamePassword][password]"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<button type="submit" class="btn btn-primary">Sign in</button>
+				</div>
+			</div>
+		</f:form>
+	</div>
+</f:section>

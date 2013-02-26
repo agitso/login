@@ -1,0 +1,8 @@
+-
+  name: 'Login'
+  uriPattern: 'login(/{@action})'
+  defaults:
+    '@package':    'Ag.Login'
+    '@controller': 'Authentication'
+    '@action':     'login'
+    '@format':     'html'

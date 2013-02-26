@@ -1,0 +1,18 @@
+Ag:
+  Login:
+    onAuthenticationSuccess:
+      package: ''
+      controller: ''
+      action: ''
+
+    onLogout:
+      package: ''
+      controller: ''
+      action: ''
+
+TYPO3:
+  Flow:
+    object:
+      excludeClasses:
+        'kriswallsmith.assetic' : ['.*']
+        'symfony.process' : ['Symfony\\Component\\Process\\Tests\\.*']
