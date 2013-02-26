@@ -81,6 +81,24 @@ class AccountService {
 	}
 
 	/**
+	 * Create account or update account depending on if it exists or not
+	 *
+	 * @param string $email
+	 * @param string $name
+	 * @param string $password
+	 * @param string $imageId
+	 * @return \stdClass
+	 */
+	public function upsertAccount($email, $name, $password = NULL, $imageId = NULL) {
+		$account = $this->accountRepository->findOneByEmail($email);
+		if (empty($account)) {
+			return $this->createAccount($email, $name, $password, $imageId);
+		} else {
+			return $this->updateAccountInfo($email, $name, $imageId);
+		}
+	}
+
+	/**
 	 * @param string $email
 	 * @param string $newPassword
 	 * @throws \InvalidArgumentException

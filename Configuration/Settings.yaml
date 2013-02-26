@@ -1,14 +1,14 @@
 Ag:
   Login:
     onAuthenticationSuccess:
-      package: ''
-      controller: ''
-      action: ''
+      package: 'Ag.Login'
+      controller: 'Authentication'
+      action: 'loggedIn'
 
     onLogout:
-      package: ''
-      controller: ''
-      action: ''
+      package: 'Ag.Login'
+      controller: 'Authentication'
+      action: 'login'
 
 TYPO3:
   Flow:

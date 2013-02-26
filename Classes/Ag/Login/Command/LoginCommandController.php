@@ -17,9 +17,11 @@ class LoginCommandController extends \TYPO3\Flow\Cli\CommandController {
 	/**
 	 * @param string $email
 	 * @param string $name
+	 * @param string $password
+	 * @return void
 	 */
-	public function createAccountCommand($email, $name) {
-		$account = $this->accountService->createAccount($email, $name);
+	public function createAccountCommand($email, $name, $password='') {
+		$account = $this->accountService->createAccount($email, $name, $password);
 		$this->outputLine('Created account "' . $account->name . ' <' . $account->email . '>"');
 	}
 

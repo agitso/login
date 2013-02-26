@@ -60,6 +60,15 @@ class AuthenticationController extends \TYPO3\Flow\Security\Authentication\Contr
 
 		$this->redirect($this->settings['onLogout']['action'], $this->settings['onLogout']['controller'], $this->settings['onLogout']['package']);
 	}
+
+	/**
+	 * @return string
+	 */
+	public function loggedInAction() {
+		return 'Successfully logged in as ' . $this->securityContext->getAccount()->getAccountIdentifier();
+	}
+
+
 }
 
 ?>
