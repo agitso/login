@@ -199,6 +199,20 @@ class AccountService {
 
 	/**
 	 * @param string $email
+	 * @return array
+	 */
+	public function getRolesForAccount($email) {
+		$account = $this->accountRepository->findOneByEmail($email);
+
+		if(empty($account)) {
+			return array();
+		}
+
+		return $account->getRoles();
+	}
+
+	/**
+	 * @param string $email
 	 * @throws \InvalidArgumentException
 	 * @return \stdClass
 	 */

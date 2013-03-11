@@ -130,6 +130,19 @@ class Account {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getRoles() {
+		$roles = array();
+
+		foreach($this->login->getRoles() as $role) {
+			$roles[] = $role->__toString();
+		}
+
+		return $roles;
+	}
+
+	/**
 	 * @return \stdClass
 	 */
 	public function getDescriptor() {
