@@ -143,17 +143,17 @@ class Account {
 	}
 
 	/**
-	 * @return \stdClass
+	 * @return AccountDescriptor
 	 */
 	public function getDescriptor() {
-		$descriptor = new \stdClass();
-		$descriptor->accountId = $this->accountId;
-		$descriptor->name = $this->name;
-		$descriptor->email = $this->login->getAccountIdentifier();
-		$descriptor->imageId = $this->imageId;
-		$descriptor->enabled = $this->enabled;
+		$d = new AccountDescriptor();
+		$d->accountId = $this->accountId;
+		$d->name = $this->name;
+		$d->email = $this->login->getAccountIdentifier();
+		$d->imageId = $this->imageId;
+		$d->enabled = $this->enabled;
 
-		return $descriptor;
+		return $d;
 	}
 
 	/**

@@ -37,7 +37,7 @@ class AccountService {
 	 * @param string $name
 	 * @param string $password
 	 * @param string $imageId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 * @throws \InvalidArgumentException
 	 */
 	public function createAccount($email, $name, $password = '', $imageId = '') {
@@ -54,7 +54,7 @@ class AccountService {
 	 * @param string $email
 	 * @param string $name
 	 * @param string $imageId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 * @throws \InvalidArgumentException
 	 */
 	public function updateAccountInfo($email, $name = NULL, $imageId = NULL) {
@@ -71,7 +71,7 @@ class AccountService {
 	 * @param string $name
 	 * @param string $password
 	 * @param string $imageId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function upsertAccount($email, $name, $password = NULL, $imageId = NULL) {
 		$account = $this->accountRepository->findOneByEmail($email);
@@ -87,7 +87,7 @@ class AccountService {
 	 * @param string $name
 	 * @param string $password
 	 * @param string $imageId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	protected function createAccountHelper($email, $name, $password, $imageId) {
 		$account = $this->accountFactory->create($email, $name, $password, $imageId);
@@ -103,7 +103,7 @@ class AccountService {
 	 * @param \Ag\Login\Domain\Model\Account $account
 	 * @param string $name
 	 * @param string $imageId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	protected function updateAccountHelper($account, $name, $imageId) {
 		if ($name !== NULL) {
@@ -137,7 +137,7 @@ class AccountService {
 
 	/**
 	 * @param string $email
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function getAccountByEmail($email) {
 		$account = $this->accountRepository->findOneByEmail($email);
@@ -151,7 +151,7 @@ class AccountService {
 
 	/**
 	 * @param string $accountId
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function getAccountByAccountId($accountId) {
 		$account = $this->accountRepository->findByIdentifier($accountId);
@@ -167,7 +167,7 @@ class AccountService {
 	 * @param string $email
 	 * @param string $role
 	 * @throws \InvalidArgumentException
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function addRoleToAccount($email, $role) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
@@ -184,7 +184,7 @@ class AccountService {
 	 * @param string $email
 	 * @param string $role
 	 * @throws \InvalidArgumentException
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function removeRoleFromAccount($email, $role) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
@@ -214,7 +214,7 @@ class AccountService {
 	/**
 	 * @param string $email
 	 * @throws \InvalidArgumentException
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function disableAccount($email) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
@@ -230,7 +230,7 @@ class AccountService {
 	/**
 	 * @param string $email
 	 * @throws \InvalidArgumentException
-	 * @return \stdClass
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function enableAccount($email) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
