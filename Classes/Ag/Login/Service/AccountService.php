@@ -166,13 +166,13 @@ class AccountService {
 	/**
 	 * @param string $email
 	 * @param string $role
-	 * @throws \InvalidArgumentException
+	 * @param string $key Optional key. This could fx be a client id
 	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
-	public function addRoleToAccount($email, $role) {
+	public function addRoleToAccount($email, $role, $key = '') {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
-		$account->addRole($role);
+		$account->addRole($role, $key);
 
 		$this->accountRepository->update($account);
 		$this->persistenceManager->persistAll();
@@ -183,13 +183,13 @@ class AccountService {
 	/**
 	 * @param string $email
 	 * @param string $role
-	 * @throws \InvalidArgumentException
+	 * @param string $key Optional key. This could fx be a client id
 	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
-	public function removeRoleFromAccount($email, $role) {
+	public function removeRoleFromAccount($email, $role, $key = '') {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
-		$account->removeRole($role);
+		$account->removeRole($role, $key);
 
 		$this->accountRepository->update($account);
 		$this->persistenceManager->persistAll();
@@ -204,7 +204,7 @@ class AccountService {
 	public function getRolesForAccount($email) {
 		$account = $this->accountRepository->findOneByEmail($email);
 
-		if(empty($account)) {
+		if (empty($account)) {
 			return array();
 		}
 

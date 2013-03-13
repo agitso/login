@@ -99,8 +99,11 @@ class Account {
 
 	/**
 	 * @param string $role
+	 * @param string $key
 	 */
-	public function addRole($role) {
+	public function addRole($role, $key = '') {
+		$role = $this->getRoleWithKey($role, $key);
+
 		$role = new \TYPO3\Flow\Security\Policy\Role($role);
 
 		if ($this->login->hasRole($role)) {
@@ -113,10 +116,14 @@ class Account {
 		// Publish event
 	}
 
+
 	/**
 	 * @param string $role
+	 * @param string $key
 	 */
-	public function removeRole($role) {
+	public function removeRole($role, $key = '') {
+		$role = $this->getRoleWithKey($role, $key);
+
 		$role = new \TYPO3\Flow\Security\Policy\Role($role);
 
 		if (!$this->login->hasRole($role)) {
@@ -135,8 +142,20 @@ class Account {
 	public function getRoles() {
 		$roles = array();
 
-		foreach($this->login->getRoles() as $role) {
-			$roles[] = $role->__toString();
+		foreach ($this->login->getRoles() as $role) {
+			$role = $role->__toString();
+
+			if(strpos($role, '|') === FALSE) {
+				$roles['Default'] = $role;
+			} else {
+				$role = explode('|', $role);
+
+				if(!array_key_exists($role[1], $roles)) {
+					$roles[$role[1]] = array();
+				}
+
+				$roles[$role[1]][] = $role[0];
+			}
 		}
 
 		return $roles;
@@ -195,12 +214,26 @@ class Account {
 	 * @return void
 	 */
 	public function enable() {
-		if($this->isEnabled()) {
+		if ($this->isEnabled()) {
 			return;
 		}
 
 		$this->enabled = TRUE;
 		$this->edits++;
+	}
+
+	/**
+	 * @param string $role
+	 * @param string $key
+	 * @return string
+	 */
+	protected function getRoleWithKey($role, $key) {
+		$key = trim($key);
+		if (!empty($key)) {
+			$role .= '|' . $key;
+			return $role;
+		}
+		return $role;
 	}
 }
 

@@ -19,6 +19,8 @@ class AccountFactory {
 	 * @param string $name
 	 * @param string $password
 	 * @param string $imageId
+	 * @param string $imageId
+	 * @throws \InvalidArgumentException
 	 * @return \Ag\Login\Domain\Model\Account
 	 */
 	public function create($email, $name='', $password='', $imageId='') {
