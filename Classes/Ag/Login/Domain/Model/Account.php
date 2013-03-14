@@ -37,7 +37,7 @@ class Account {
 
 	/**
 	 * @var \TYPO3\Flow\Security\Account
-	 * @ORM\OneToOne(cascade={"all"})
+	 * @ORM\OneToOne(cascade={"all"}, fetch="EAGER")
 	 */
 	protected $login;
 
