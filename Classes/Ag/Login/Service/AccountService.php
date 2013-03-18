@@ -137,7 +137,7 @@ class AccountService {
 
 	/**
 	 * @param string $email
-	 * @return \Ag\Login\Domain\Model\AccountDescriptor
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor|null
 	 */
 	public function getAccountByEmail($email) {
 		$account = $this->accountRepository->findOneByEmail($email);
@@ -165,14 +165,13 @@ class AccountService {
 
 	/**
 	 * @param string $email
-	 * @param string $role
-	 * @param string $key Optional key. This could fx be a client id
+	 * @param \Ag\Login\Domain\Model\Role $role
 	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
-	public function addRoleToAccount($email, $role, $key = '') {
+	public function addRoleByEmail($email, $role) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
-		$account->addRole($role, $key);
+		$account->addRole($role);
 
 		$this->accountRepository->update($account);
 		$this->persistenceManager->persistAll();
@@ -182,14 +181,13 @@ class AccountService {
 
 	/**
 	 * @param string $email
-	 * @param string $role
-	 * @param string $key Optional key. This could fx be a client id
+	 * @param \Ag\Login\Domain\Model\Role $role
 	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
-	public function removeRoleFromAccount($email, $role, $key = '') {
+	public function removeRoleByEmail($email, $role) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
-		$account->removeRole($role, $key);
+		$account->removeRole($role);
 
 		$this->accountRepository->update($account);
 		$this->persistenceManager->persistAll();
@@ -199,48 +197,13 @@ class AccountService {
 
 	/**
 	 * @param string $email
-	 * @return array
+	 * @param \Ag\Login\Domain\Model\Role $role
+	 * @return bool
 	 */
-	public function getRolesForAccount($email) {
-		$account = $this->accountRepository->findOneByEmail($email);
-
-		if (empty($account)) {
-			return array();
-		}
-
-		return $account->getRoles();
-	}
-
-	/**
-	 * @param string $email
-	 * @throws \InvalidArgumentException
-	 * @return \Ag\Login\Domain\Model\AccountDescriptor
-	 */
-	public function disableAccount($email) {
+	public function hasRoleByEmail($email, $role) {
 		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
 
-		$account->disable();
-
-		$this->accountRepository->update($account);
-		$this->persistenceManager->persistAll();
-
-		return $account->getDescriptor();
-	}
-
-	/**
-	 * @param string $email
-	 * @throws \InvalidArgumentException
-	 * @return \Ag\Login\Domain\Model\AccountDescriptor
-	 */
-	public function enableAccount($email) {
-		$account = $this->getAccountByEmailThrowExceptionIfNotExistsing($email);
-
-		$account->enable();
-
-		$this->accountRepository->update($account);
-		$this->persistenceManager->persistAll();
-
-		return $account->getDescriptor();
+		return $account->hasRole($role);
 	}
 
 	/**

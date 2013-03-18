@@ -52,13 +52,9 @@ class Account {
 	protected $imageId;
 
 	/**
-	 * @var bool
-	 */
-	protected $enabled = TRUE;
-
-	/**
 	 * @param \TYPO3\Flow\Security\Account $login
 	 * @param string $name
+	 * @param string $imageId
 	 * @param string $imageId
 	 */
 	public function __construct($login, $name, $imageId) {
@@ -98,84 +94,6 @@ class Account {
 	}
 
 	/**
-	 * @param string $role
-	 * @param string $key
-	 */
-	public function addRole($role, $key = '') {
-		$role = $this->getRoleWithKey($role, $key);
-
-		$role = new \TYPO3\Flow\Security\Policy\Role($role);
-
-		if ($this->login->hasRole($role)) {
-			return;
-		}
-
-		$this->login->addRole($role);
-		$this->edits++;
-
-		// Publish event
-	}
-
-
-	/**
-	 * @param string $role
-	 * @param string $key
-	 */
-	public function removeRole($role, $key = '') {
-		$role = $this->getRoleWithKey($role, $key);
-
-		$role = new \TYPO3\Flow\Security\Policy\Role($role);
-
-		if (!$this->login->hasRole($role)) {
-			return;
-		}
-
-		$this->login->removeRole($role);
-		$this->edits++;
-
-		// Publish event
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getRoles() {
-		$roles = array();
-
-		foreach ($this->login->getRoles() as $role) {
-			$role = $role->__toString();
-
-			if(strpos($role, '|') === FALSE) {
-				$roles['Default'] = $role;
-			} else {
-				$role = explode('|', $role);
-
-				if(!array_key_exists($role[1], $roles)) {
-					$roles[$role[1]] = array();
-				}
-
-				$roles[$role[1]][] = $role[0];
-			}
-		}
-
-		return $roles;
-	}
-
-	/**
-	 * @return AccountDescriptor
-	 */
-	public function getDescriptor() {
-		$d = new AccountDescriptor();
-		$d->accountId = $this->accountId;
-		$d->name = $this->name;
-		$d->email = $this->login->getAccountIdentifier();
-		$d->imageId = $this->imageId;
-		$d->enabled = $this->enabled;
-
-		return $d;
-	}
-
-	/**
 	 * @param string $newPassword
 	 * @param \TYPO3\Flow\Security\Cryptography\HashService $hashService
 	 * @throws \InvalidArgumentException
@@ -192,48 +110,69 @@ class Account {
 	}
 
 	/**
+	 * @param \Ag\Login\Domain\Model\Role $role
+	 */
+	public function addRole($role) {
+		$this->login->addRole($this->roleToFlowRole($role));
+	}
+
+	/**
+	 * @param \Ag\Login\Domain\Model\Role $role
+	 */
+	public function removeRole($role) {
+		$this->login->removeRole($this->roleToFlowRole($role));
+	}
+
+	/**
+	 * @param \Ag\Login\Domain\Model\Role $role
 	 * @return bool
 	 */
-	public function isEnabled() {
-		return $this->enabled;
+	public function hasRole($role) {
+		return $this->login->hasRole($this->roleToFlowRole($role));
 	}
 
 	/**
-	 * @return void
+	 * @param \Ag\Login\Domain\Model\Role $role
+	 * @return \TYPO3\Flow\Security\Policy\Role
 	 */
-	public function disable() {
-		if (!$this->isEnabled()) {
-			return;
-		}
-
-		$this->enabled = FALSE;
-		$this->edits++;
+	protected function roleToFlowRole($role) {
+		return new \TYPO3\Flow\Security\Policy\Role($role->getRole().'|'.$role->getClientId());
 	}
 
 	/**
-	 * @return void
+	 * @param \TYPO3\Flow\Security\Policy\Role $role
+	 * @throws \InvalidArgumentException
+	 * @return \Ag\Login\Domain\Model\Role $role
 	 */
-	public function enable() {
-		if ($this->isEnabled()) {
-			return;
+	protected function flowRoleToRole($role) {
+		if(strpos($role->__toString(), '|') === FALSE) {
+			return new Role($role->__toString());
+		} else {
+			$role = explode('|', $role->__toString());
+			if(count($role)===2) {
+				return new Role($role[0],$role[1]);
+			} else {
+				throw new \InvalidArgumentException('Could not succesfully parse the Flow role for account ' . $this->login->getAccountIdentifier());
+			}
 		}
-
-		$this->enabled = TRUE;
-		$this->edits++;
 	}
 
 	/**
-	 * @param string $role
-	 * @param string $key
-	 * @return string
+	 * @return AccountDescriptor
 	 */
-	protected function getRoleWithKey($role, $key) {
-		$key = trim($key);
-		if (!empty($key)) {
-			$role .= '|' . $key;
-			return $role;
+	public function getDescriptor() {
+		$d = new AccountDescriptor();
+		$d->accountId = $this->accountId;
+		$d->email = $this->login->getAccountIdentifier();
+		$d->name = $this->name;
+		$d->imageId = $this->imageId;
+
+		$d->roles = $this->login->getRoles();
+		foreach($d->roles as $key=>$role) {
+			$d->roles[$key] = $this->flowRoleToRole($role);
 		}
-		return $role;
+
+		return $d;
 	}
 }
 

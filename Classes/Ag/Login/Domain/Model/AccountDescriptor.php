@@ -28,6 +28,11 @@ class AccountDescriptor {
 	 */
 	public $enabled;
 
+	/**
+	 * @var array
+	 */
+	public $roles;
+
 }
 
 ?>
