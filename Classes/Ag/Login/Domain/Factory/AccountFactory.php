@@ -15,6 +15,12 @@ class AccountFactory {
 	protected $accountFactory;
 
 	/**
+	 * @var \TYPO3\Flow\Validation\Validator\EmailAddressValidator
+	 * @Flow\Inject
+	 */
+	protected $emailAddressValidator;
+
+	/**
 	 * @param string $email
 	 * @param string $name
 	 * @param string $password
@@ -24,8 +30,7 @@ class AccountFactory {
 	 * @return \Ag\Login\Domain\Model\Account
 	 */
 	public function create($email, $name='', $password='', $imageId='') {
-		$emailValidator = new \TYPO3\Flow\Validation\Validator\EmailAddressValidator();
-		$validation = $emailValidator->validate($email);
+		$validation = $this->emailAddressValidator->validate($email);
 
 		if($validation->hasErrors()) {
 			throw new \InvalidArgumentException('Email "'.$email.'" is not valid.');

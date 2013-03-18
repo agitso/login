@@ -20,11 +20,19 @@ class Role {
 
 	/**
 	 * @param string $role
-	 * @param null|string $clientId
+	 * @param string $clientId
 	 */
-	public function __construct($role, $clientId = NULL) {
-		$this->role = $role;
-		$this->clientId = $clientId;
+	public function __construct($role, $clientId = '') {
+		$this->role = trim($role);
+		$this->clientId = trim($clientId);
+
+		if(empty($this->role)) {
+			$this->role = NULL;
+		}
+
+		if(empty($this->clientId)) {
+			$this->clientId = NULL;
+		}
 	}
 
 	/**

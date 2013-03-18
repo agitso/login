@@ -24,11 +24,6 @@ class AccountDescriptor {
 	public $imageId;
 
 	/**
-	 * @var bool
-	 */
-	public $enabled;
-
-	/**
 	 * @var array
 	 */
 	public $roles;

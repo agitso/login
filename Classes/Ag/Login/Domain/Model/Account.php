@@ -158,7 +158,7 @@ class Account {
 	}
 
 	/**
-	 * @return AccountDescriptor
+	 * @return \Ag\Login\Domain\Model\AccountDescriptor
 	 */
 	public function getDescriptor() {
 		$d = new AccountDescriptor();
