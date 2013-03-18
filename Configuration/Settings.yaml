@@ -1,18 +1,7 @@
-Ag:
-  Login:
-    onAuthenticationSuccess:
-      package: 'Ag.Login'
-      controller: 'Authentication'
-      action: 'loggedIn'
-
-    onLogout:
-      package: 'Ag.Login'
-      controller: 'Authentication'
-      action: 'login'
-
 TYPO3:
   Flow:
-    object:
-      excludeClasses:
-        'kriswallsmith.assetic' : ['.*']
-        'symfony.process' : ['Symfony\\Component\\Process\\Tests\\.*']
+    security:
+      authentication:
+        providers:
+          DefaultProvider:
+            provider: PersistedUsernamePasswordProvider
