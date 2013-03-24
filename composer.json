@@ -6,8 +6,7 @@
     "require": {
         "typo3/flow": "*",
 		"ag/event": "*",
-		"ag/utility": "*",
-		"kriswallsmith\/assetic": "*"
+		"ag/utility": "*"
     },
     "autoload": {
         "psr-0": {
